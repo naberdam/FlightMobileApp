@@ -11,8 +11,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val button = findViewById<Button>(R.id.button)
-        button.setOnClickListener{
+        val url = findViewById<Button>(R.id.URL)
+        url.setOnClickListener{
+            val intent = Intent(this, GameActivity::class.java)
+            startActivity(intent)
+        }
+
+        val connect = findViewById<Button>(R.id.connect)
+        connect.setOnClickListener{
             val intent = Intent(this, GameActivity::class.java)
             startActivity(intent)
         }

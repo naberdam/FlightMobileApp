@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">FlightMobileApp</string>
+    <string name="urlButton">Enter URL</string>
+    <string name="connectButton">Connect</string>
 </resources>
