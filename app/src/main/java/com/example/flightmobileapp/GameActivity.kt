@@ -13,7 +13,7 @@ class GameActivity : AppCompatActivity(), JoystickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val joystick = JoystickView(this)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_game)
     }
 
     override fun onJoystickMoved(
