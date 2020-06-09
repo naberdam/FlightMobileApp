@@ -15,7 +15,7 @@
         <LinearLayout
             android:id="@+id/servers"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="270dp"
             android:orientation="vertical"
             android:layout_gravity="center"
             android:gravity="center"
@@ -58,7 +58,7 @@
                 android:text="@string/urlButton"
                 app:layout_constraintHorizontal_bias="0.492"
                 app:layout_constraintStart_toStartOf="parent"
-                tools:ignore="MissingConstraints" />
+                tools:ignore="ButtonStyle,MissingConstraints,NestedWeights" />
 
             <Button
                 android:id="@+id/connect"
@@ -67,13 +67,14 @@
                 android:layout_weight="1"
                 android:text="@string/connectButton"
                 app:layout_constraintEnd_toEndOf="parent"
-                tools:ignore="MissingConstraints" />
+                tools:ignore="ButtonStyle,MissingConstraints" />
 
         </LinearLayout>
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/symbol_2_63" />
+            android:src="@drawable/symbol_2_63"
+            android:contentDescription="@string/icon" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

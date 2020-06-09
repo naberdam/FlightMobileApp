@@ -8,5 +8,6 @@
     <string name="local3">Localhost3</string>
     <string name="local4">Localhost4</string>
     <string name="local5">Localhost5</string>
+    <string name="icon">flight gear icon</string>
 
 </resources>
