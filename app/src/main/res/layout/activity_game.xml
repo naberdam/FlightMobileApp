@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:paddingBottom="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp"
+    android:orientation="horizontal"
+    tools:context="com.example.">
 
-    <JoystickView
+    <com.example.flightmobileapp.JoystickView
         android:layout_width="wrap_content"
         android:layout_height="300dp"
         android:id="@+id/joystickLeft"
         android:layout_weight="1"/>
 
-    <JoystickView
+    <com.example.flightmobileapp.JoystickView
         android:layout_width="wrap_content"
         android:layout_height="300dp"
         android:id="@+id/joystickRight"

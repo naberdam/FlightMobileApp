@@ -1,3 +1,5 @@
+package com.example.flightmobileapp
+
 import android.content.Context
 import android.graphics.Color
 import android.graphics.Paint
@@ -9,9 +11,7 @@ import android.view.SurfaceView
 import android.view.View
 import android.view.View.OnTouchListener
 
-/**
- * Created by Daniel on 7/25/2016.
- */
+
 class JoystickView : SurfaceView, SurfaceHolder.Callback, OnTouchListener {
     private var centerX = 0f
     private var centerY = 0f

@@ -2,8 +2,7 @@ package com.example.flightmobileapp
 //import android.support.v8.1.app.AppCompatActivity
 
 
-import JoystickView
-import JoystickView.JoystickListener
+import com.example.flightmobileapp.JoystickView.JoystickListener
 import android.os.Bundle
 //import android.support.v7.app.AppCompatActivity
 import android.util.Log
