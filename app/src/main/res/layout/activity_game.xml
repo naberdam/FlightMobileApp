@@ -3,23 +3,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:paddingBottom="16dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:paddingTop="16dp"
+    android:paddingTop="10dp"
     android:orientation="horizontal"
-    tools:context="com.example.">
+    tools:context="com.example.flightmobileapp.GameActivity">
 
-    <com.example.flightmobileapp.JoystickView
-        android:layout_width="wrap_content"
-        android:layout_height="300dp"
-        android:id="@+id/joystickLeft"
-        android:layout_weight="1"/>
-
-    <com.example.flightmobileapp.JoystickView
-        android:layout_width="wrap_content"
-        android:layout_height="300dp"
-        android:id="@+id/joystickRight"
-        android:layout_weight="1"/>
-
+    <io.github.controlwear.virtual.joystick.android.JoystickView
+        android:id="@+id/joystick"
+        android:layout_width="187dp"
+        android:layout_height="213dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="0dp"
+        android:layout_weight="1"
+        custom:JV_backgroundColor="#020202"
+        custom:JV_borderColor="#6A6868"
+        custom:JV_borderWidth="8dp"
+        custom:JV_buttonColor="#6E6968"
+        tools:ignore="MissingConstraints,ObsoleteLayoutParam" />
 </LinearLayout>
