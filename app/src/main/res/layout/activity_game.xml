@@ -20,7 +20,7 @@
             tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteX="4dp"
             tools:layout_editor_absoluteY="11dp"
-            tools:srcCompat="@tools:sample/avatars" />
+            tools:srcCompat="@tools:sample/avatars"/>
 
         <io.github.controlwear.virtual.joystick.android.JoystickView
             android:id="@+id/joystick"

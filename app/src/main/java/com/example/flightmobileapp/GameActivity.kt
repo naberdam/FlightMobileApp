@@ -49,17 +49,13 @@ class GameActivity : AppCompatActivity() {
         })
         setContentView(R.layout.activity_game)
         //val joystick = findViewById(R.id.joystick) as JoystickView
-/*        joystick.setOnMoveListener(object : JoystickView.OnMoveListener {
-            override fun onMove(angle: Int, strength: Int) {
-
-                val rad = toRadians(angle + 0.0)
-                var x = kotlin.math.cos(rad)
-                var y = kotlin.math.sin(rad)
-                x = (x * strength) / 100
-                y = (y * strength) / 100
-                print(x)
-                print(y)
-            }
-        })*/
+        joystick.setOnMoveListener { angle, strength ->
+            val rad = toRadians(angle + 0.0)
+            var x = kotlin.math.cos(rad)
+            var y = kotlin.math.sin(rad)
+            x = (x * strength) / 100
+            y = (y * strength) / 100
+            // send to server
+        }
     }
 }
