@@ -45,20 +45,20 @@
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:orientation="vertical">
+
                <TextView
-                   android:id="@+id/textView"
-                   android:layout_width="50dp"
+                   android:id="@+id/textView2"
+                   android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:text="@string/rudder"
-                   tools:layout_editor_absoluteX="181dp"
-                   tools:layout_editor_absoluteY="684dp"
+                   android:text="@string/throttle"
+                   tools:layout_editor_absoluteX="299dp"
+                   tools:layout_editor_absoluteY="417dp"
                    tools:ignore="MissingConstraints" />
 
                <SeekBar
                    android:id="@+id/throttle"
                    android:layout_width="wrap_content"
-                   android:layout_height="180dp"
-                   android:layout_gravity="center"
+                   android:layout_height="200dp"
                    android:rotation="270"
                    tools:layout_editor_absoluteX="236dp"
                    tools:layout_editor_absoluteY="522dp"
@@ -74,16 +74,15 @@
             tools:layout_editor_absoluteX="105dp"
             tools:layout_editor_absoluteY="658dp" />
 
-
-
         <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
+            android:id="@+id/textView"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:text="@string/throttle"
-            tools:layout_editor_absoluteX="299dp"
-            tools:layout_editor_absoluteY="417dp"
+            android:text="@string/rudder"
+            tools:layout_editor_absoluteX="181dp"
+            tools:layout_editor_absoluteY="684dp"
             tools:ignore="MissingConstraints" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
