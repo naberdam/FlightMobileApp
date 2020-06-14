@@ -12,12 +12,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val gson = GsonBuilder()
-            .setLenient()
-            .create()
-        val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:52686/")
-            .addConverterFactory(GsonConverterFactory.create(gson))
+//        val db = LocalHostDataBase.getDatabase(applicationContext)
+//        val localHosts = db.localHostDao()
+//        val gson = GsonBuilder()
+//            .setLenient()
+//            .create()
+//        val retrofit = Retrofit.Builder()
+//            .baseUrl("http://10.0.2.2:8686/")
+//            .addConverterFactory(GsonConverterFactory.create(gson))
         setContentView(R.layout.activity_main)
 
         val url = findViewById<Button>(R.id.URL)

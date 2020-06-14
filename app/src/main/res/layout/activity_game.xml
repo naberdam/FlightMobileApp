@@ -6,11 +6,12 @@
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     tools:context=".GameActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:gravity="center"
         tools:layout_editor_absoluteX="141dp"
         tools:layout_editor_absoluteY="-95dp">
 
@@ -21,19 +22,49 @@
             android:contentDescription="@string/todo"
             android:gravity="center"
             tools:ignore="MissingConstraints"
-            tools:srcCompat="@tools:sample/avatars" />
+            tools:srcCompat="@tools:sample/avatars"
+            android:src="@drawable/symbol_2_63"/>
 
-        <io.github.controlwear.virtual.joystick.android.JoystickView
-            android:id="@+id/joystick"
-            android:layout_width="207dp"
-            android:layout_height="180dp"
-            custom:JV_backgroundColor="#020202"
-            custom:JV_borderColor="#6A6868"
-            custom:JV_borderWidth="8dp"
-            custom:JV_buttonColor="#6E6968"
-            tools:ignore="MissingConstraints,ObsoleteLayoutParam"
-            tools:layout_editor_absoluteX="115dp"
-            tools:layout_editor_absoluteY="452dp" />
+       <LinearLayout
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal">
+           <io.github.controlwear.virtual.joystick.android.JoystickView
+               android:id="@+id/joystick"
+               android:layout_width="207dp"
+               android:layout_height="180dp"
+               custom:JV_backgroundColor="#020202"
+               custom:JV_borderColor="#6A6868"
+               custom:JV_borderWidth="8dp"
+               custom:JV_buttonColor="#6E6968"
+               tools:ignore="MissingConstraints,ObsoleteLayoutParam"
+               tools:layout_editor_absoluteX="115dp"
+               tools:layout_editor_absoluteY="452dp" />
+
+           <LinearLayout
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:orientation="vertical">
+               <TextView
+                   android:id="@+id/textView"
+                   android:layout_width="50dp"
+                   android:layout_height="wrap_content"
+                   android:text="@string/rudder"
+                   tools:layout_editor_absoluteX="181dp"
+                   tools:layout_editor_absoluteY="684dp"
+                   tools:ignore="MissingConstraints" />
+
+               <SeekBar
+                   android:id="@+id/throttle"
+                   android:layout_width="wrap_content"
+                   android:layout_height="180dp"
+                   android:layout_gravity="center"
+                   android:rotation="270"
+                   tools:layout_editor_absoluteX="236dp"
+                   tools:layout_editor_absoluteY="522dp"
+                   tools:ignore="MissingConstraints" />
+           </LinearLayout>
+       </LinearLayout>
 
         <SeekBar
             android:id="@+id/rudder"
@@ -43,24 +74,7 @@
             tools:layout_editor_absoluteX="105dp"
             tools:layout_editor_absoluteY="658dp" />
 
-        <SeekBar
-            android:id="@+id/throttle"
-            android:layout_width="180dp"
-            android:layout_height="32dp"
-            android:layout_gravity="center"
-            android:rotation="270"
-            tools:layout_editor_absoluteX="236dp"
-            tools:layout_editor_absoluteY="522dp"
-            tools:ignore="MissingConstraints" />
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:text="@string/rudder"
-            tools:layout_editor_absoluteX="181dp"
-            tools:layout_editor_absoluteY="684dp"
-            tools:ignore="MissingConstraints" />
 
         <TextView
             android:id="@+id/textView2"
@@ -70,6 +84,6 @@
             tools:layout_editor_absoluteX="299dp"
             tools:layout_editor_absoluteY="417dp"
             tools:ignore="MissingConstraints" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
