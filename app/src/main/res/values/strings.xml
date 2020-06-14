@@ -10,5 +10,7 @@
     <string name="local5">Localhost5</string>
     <string name="icon">flight gear icon</string>
     <string name="todo">TODO</string>
+    <string name="rudder">rudder</string>
+    <string name="throttle">throttle</string>
 
 </resources>

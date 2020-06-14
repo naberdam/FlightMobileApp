@@ -21,14 +21,17 @@ import java.lang.Math.*
 
 
 class GameActivity : AppCompatActivity() {
-
+    private var aileron : Double = 0.0
+    private var elevator : Double = 0.0
+    private var throttle: Double = 0.0
+    private var rudder: Double = 0.0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val gson = GsonBuilder()
             .setLenient()
             .create()
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:8686/")
+            .baseUrl("http://10.0.2.2:52686")
             .addConverterFactory(GsonConverterFactory.create(gson)).build()
         val api = retrofit.create(Api::class.java)
         val body = api.getImg().enqueue(object : Callback<ResponseBody> {
@@ -51,10 +54,10 @@ class GameActivity : AppCompatActivity() {
         //val joystick = findViewById(R.id.joystick) as JoystickView
         joystick.setOnMoveListener { angle, strength ->
             val rad = toRadians(angle + 0.0)
-            var x = kotlin.math.cos(rad)
-            var y = kotlin.math.sin(rad)
-            x = (x * strength) / 100
-            y = (y * strength) / 100
+            aileron = kotlin.math.cos(rad)
+            elevator = kotlin.math.sin(rad)
+            aileron = (aileron * strength) / 100
+            elevator = (elevator * strength) / 100
             // send to server
         }
     }

@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
             .setLenient()
             .create()
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:8686/")
+            .baseUrl("http://10.0.2.2:52686/")
             .addConverterFactory(GsonConverterFactory.create(gson))
         setContentView(R.layout.activity_main)
 
