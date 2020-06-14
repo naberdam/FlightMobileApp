@@ -1,31 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
-    android:paddingBottom="16dp"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:paddingTop="10dp"
-    android:orientation="horizontal"
-    tools:context="com.example.flightmobileapp.GameActivity">
+    tools:context=".GameActivity">
 
-    <io.github.controlwear.virtual.joystick.android.JoystickView
-        android:id="@+id/joystick"
-        android:layout_width="187dp"
-        android:layout_height="213dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="0dp"
-        android:layout_weight="1"
-        custom:JV_backgroundColor="#020202"
-        custom:JV_borderColor="#6A6868"
-        custom:JV_borderWidth="8dp"
-        custom:JV_buttonColor="#6E6968"
-        tools:ignore="MissingConstraints,ObsoleteLayoutParam" />
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+        <ImageView
+            android:id="@+id/SimulatorView"
+            android:layout_width="402dp"
+            android:layout_height="359dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/todo"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="4dp"
+            tools:layout_editor_absoluteY="11dp"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <io.github.controlwear.virtual.joystick.android.JoystickView
+            android:id="@+id/joystick"
+            android:layout_width="187dp"
+            android:layout_height="213dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_weight="1"
+            custom:JV_backgroundColor="#020202"
+            custom:JV_borderColor="#6A6868"
+            custom:JV_borderWidth="8dp"
+            custom:JV_buttonColor="#6E6968"
+            tools:ignore="MissingConstraints,ObsoleteLayoutParam"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="510dp" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

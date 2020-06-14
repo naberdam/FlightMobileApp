@@ -9,5 +9,6 @@
     <string name="local4">Localhost4</string>
     <string name="local5">Localhost5</string>
     <string name="icon">flight gear icon</string>
+    <string name="todo">TODO</string>
 
 </resources>
