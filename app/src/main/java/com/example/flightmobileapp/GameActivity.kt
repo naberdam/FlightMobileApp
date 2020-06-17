@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.flightmobileapp.Models.JoyStickData
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_game.*
+import kotlinx.coroutines.coroutineScope
 import okhttp3.ResponseBody
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,13 +23,17 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.POST
 import java.lang.Math.*
 import java.math.RoundingMode
+import java.util.*
+import kotlin.concurrent.schedule
 
 class GameActivity/*(var url: String)*/ : AppCompatActivity() {
+    //private val thread = SimpleRunnable()
     private val client = CommandClient("10.0.2.2", 52686)
     private var joyStick = JoyStickData(0.0, 0.0, 0.0, 0.0)
-    override fun onCreate(savedInstanceState: Bundle?) {
+    fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
+        //thread.run(SimulatorView)
         client.connect()
         val thro = findViewById<SeekBar>(R.id.throttle)
         throttle.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -44,7 +49,8 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
                 if (seekBar != null) {
                     joyStick.throttle = (seekBar.progress.toFloat() / 100).toDouble()
                 }
-                sendValuesToServer()            }
+                sendValuesToServer()
+            }
         })
         val rud = findViewById<SeekBar>(R.id.rudder)
         rud?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -60,31 +66,36 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
                 if (seekBar != null) {
                     joyStick.rudder = ((seekBar.progress.toFloat() / 100)).toDouble()
                 }
-                sendValuesToServer()            }
+                sendValuesToServer()
+            }
         })
-        val gson = GsonBuilder()
-            .setLenient()
-            .create()
-        val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:52686")
-            .addConverterFactory(GsonConverterFactory.create(gson)).build()
-        val api = retrofit.create(Api::class.java)
-        val body = api.getImg().enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(
-                call: Call<ResponseBody>,
-                response: Response<ResponseBody>
-            ) {
-                val I = response.body()?.byteStream()
-                val B = BitmapFactory.decodeStream(I)
-                runOnUiThread {
-                    SimulatorView.setImageBitmap(B)
+        coroutineScope {
+            getScreenshotFromServer()
+        }
+/*        Timer().schedule(3000) {
+            val gson = GsonBuilder()
+                .setLenient()
+                .create()
+            val retrofit = Retrofit.Builder()
+                .baseUrl("http://10.0.2.2:52686")
+                .addConverterFactory(GsonConverterFactory.create(gson)).build()
+            val api = retrofit.create(Api::class.java)
+            val body = api.getImg().enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    val I = response.body()?.byteStream()
+                    val B = BitmapFactory.decodeStream(I)
+                    runOnUiThread {
+                        SimulatorView.setImageBitmap(B)
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                print("basa")
-            }
-        })
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    print("basa")
+                }
+            })*/
         //val joystick = findViewById(R.id.joystick) as JoystickView
         joystick.setOnMoveListener { angle, strength ->
             val rad = toRadians(angle + 0.0)
@@ -95,6 +106,7 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
             sendValuesToServer()
         }
     }
+//}
 
     /*    object ApiService {
             private val TAG = "--ApiService"
@@ -138,6 +150,35 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
                     println("1")
                 }
             })
+    }
 
+    private suspend fun getScreenshotFromServer() {
+        val gson = GsonBuilder()
+            .setLenient()
+            .create()
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://10.0.2.2:52686")
+            .addConverterFactory(GsonConverterFactory.create(gson)).build()
+        val api = retrofit.create(Api::class.java)
+        while (true) {
+                Timer().schedule(2000) {
+                }
+            val body = api.getImg().enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    val I = response.body()?.byteStream()
+                    val B = BitmapFactory.decodeStream(I)
+                    runOnUiThread {
+                        SimulatorView.setImageBitmap(B)
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    print("basa")
+                }
+            })
+        }
     }
 }

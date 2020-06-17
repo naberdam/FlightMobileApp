@@ -31,6 +31,23 @@
             android:orientation="horizontal">
 
 
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/throttle"
+                    tools:ignore="MissingConstraints"
+                    tools:layout_editor_absoluteX="350dp"
+                    tools:layout_editor_absoluteY="417dp" />
+
+
+            </FrameLayout>
+
             <io.github.controlwear.virtual.joystick.android.JoystickView
                 android:id="@+id/joystick"
                 android:layout_width="286dp"
@@ -43,31 +60,15 @@
                 tools:layout_editor_absoluteX="150dp"
                 tools:layout_editor_absoluteY="452dp" />
 
-            <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/throttle"
-                    tools:ignore="MissingConstraints"
-                    tools:layout_editor_absoluteX="350dp"
-                    tools:layout_editor_absoluteY="417dp" />
-
-
-                <SeekBar
-                    android:id="@+id/throttle"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:progressDrawable="@drawable/custom_progress"
-                    android:rotation="-90"
-                    tools:ignore="MissingConstraints"
-                    tools:layout_editor_absoluteX="500dp"
-                    tools:layout_editor_absoluteY="522dp" />
-            </FrameLayout>
+            <SeekBar
+                android:id="@+id/throttle"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:progressDrawable="@drawable/custom_progress"
+                android:rotation="-90"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="500dp"
+                tools:layout_editor_absoluteY="522dp" />
         </LinearLayout>
 
         <SeekBar
