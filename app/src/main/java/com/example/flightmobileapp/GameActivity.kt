@@ -5,11 +5,13 @@ package com.example.flightmobileapp
 import Api
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.provider.SyncStateContract
+import android.widget.SeekBar
+import android.widget.Toast
 //import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.example.flightmobileapp.Models.JoyStickData
 import com.google.gson.GsonBuilder
-import io.github.controlwear.virtual.joystick.android.JoystickView
 import kotlinx.android.synthetic.main.activity_game.*
 import okhttp3.ResponseBody
 import retrofit2.Callback
@@ -17,16 +19,49 @@ import retrofit2.Response
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.POST
 import java.lang.Math.*
+import java.math.RoundingMode
 
-
-class GameActivity : AppCompatActivity() {
-    private var aileron : Double = 0.0
-    private var elevator : Double = 0.0
-    private var throttle: Double = 0.0
-    private var rudder: Double = 0.0
+class GameActivity/*(var url: String)*/ : AppCompatActivity() {
+    private val client = CommandClient("10.0.2.2", 52686)
+    private var joyStick = JoyStickData(0.0, 0.0, 0.0, 0.0)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_game)
+        client.connect()
+        val thro = findViewById<SeekBar>(R.id.throttle)
+        throttle.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                var x = 1
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                var x = 1
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                if (seekBar != null) {
+                    joyStick.throttle = (seekBar.progress.toFloat() / 100).toDouble()
+                }
+                sendValuesToServer()            }
+        })
+        val rud = findViewById<SeekBar>(R.id.rudder)
+        rud?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                var x = 1
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                var x = 1
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                if (seekBar != null) {
+                    joyStick.rudder = ((seekBar.progress.toFloat() / 100)).toDouble()
+                }
+                sendValuesToServer()            }
+        })
         val gson = GsonBuilder()
             .setLenient()
             .create()
@@ -50,15 +85,59 @@ class GameActivity : AppCompatActivity() {
                 print("basa")
             }
         })
-        setContentView(R.layout.activity_game)
         //val joystick = findViewById(R.id.joystick) as JoystickView
         joystick.setOnMoveListener { angle, strength ->
             val rad = toRadians(angle + 0.0)
-            aileron = kotlin.math.cos(rad)
-            elevator = kotlin.math.sin(rad)
-            aileron = (aileron * strength) / 100
-            elevator = (elevator * strength) / 100
-            // send to server
+            joyStick.aileron = kotlin.math.cos(rad)
+            joyStick.elevator = kotlin.math.sin(rad)
+            joyStick.aileron = (joyStick.aileron * strength) / 100
+            joyStick.elevator = (joyStick.elevator * strength) / 100
+            sendValuesToServer()
         }
+    }
+
+    /*    object ApiService {
+            private val TAG = "--ApiService"
+
+            fun loginApiCall() {
+
+                val gson = GsonBuilder()
+                    .setLenient()
+                    .create()
+                val ret = Retrofit.Builder()
+                    .baseUrl("http://10.0.2.2:52686")
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                    .addConverterFactory(
+                        (GsonConverterFactory.create(gson))
+                            .client(Api.client)
+                            .build()
+                            .create(API::class.java)!!)
+            }
+        }*/
+    private fun sendValuesToServer() {
+        val gson = GsonBuilder().setLenient().create()
+        val retrofit = Retrofit.Builder().baseUrl("http://10.0.2.2:52686")
+            .addConverterFactory(GsonConverterFactory.create(gson)).build()
+        val api = retrofit.create(Api::class.java)
+
+
+        api.createPost(joyStick)
+            .enqueue(object : Callback<ResponseBody> {
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Toast.makeText(
+                        applicationContext, "Connection failed",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return
+                }
+
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    println("1")
+                }
+            })
+
     }
 }
