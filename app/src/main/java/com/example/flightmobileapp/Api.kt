@@ -11,6 +11,6 @@ import java.util.*
 interface Api {
     @GET("/screenshot")
     fun getImg(): Call<ResponseBody>
-    @POST("/api/Command")
+    @POST("/api/command")
     fun createPost(@Body data: JoyStickData): Call<ResponseBody>
 }
