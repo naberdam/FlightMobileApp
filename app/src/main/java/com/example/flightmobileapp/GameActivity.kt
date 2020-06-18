@@ -32,7 +32,7 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
     private val updateTextTask = object : Runnable {
         override fun run() {
             getScreenshotFromServer()
-            mainHandler.postDelayed(this, 800)
+            mainHandler.postDelayed(this, 450)
         }
     }
     //private val client = CommandClient(ip, port)
@@ -43,6 +43,7 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
             url = intent.getStringExtra("url")
         }
         setContentView(R.layout.activity_game)
+        getScreenshotFromServer()
         convertFromUrlToIpAndPort();
         //client.connect()
         mainHandler = Handler(Looper.getMainLooper())

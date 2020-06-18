@@ -14,5 +14,6 @@
     <string name="throttle">throttle</string>
     <string name="enter_local_host">Enter Local Host</string>
     <string name="empty">empty</string>
+    <string name="check_if_url_is_valid">valid check before connect</string>
 
 </resources>
