@@ -15,33 +15,52 @@
         <LinearLayout
             android:id="@+id/servers"
             android:layout_width="match_parent"
-            android:layout_height="270dp"
-            android:orientation="vertical"
+            android:layout_height="286dp"
             android:layout_gravity="center"
+            android:background="@android:color/holo_green_light"
             android:gravity="center"
-            android:background="@android:color/holo_green_light">
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/local1"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/local2"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/local3"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/local4"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/local5"/>
+            android:orientation="vertical">
 
+            <Button
+                android:id="@+id/localH1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/empty" />
+
+            <Button
+                android:id="@+id/localH2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/empty" />
+
+            <Button
+                android:id="@+id/localH3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/empty" />
+
+            <Button
+                android:id="@+id/localH4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/empty" />
+
+            <Button
+                android:id="@+id/localH5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/empty" />
+
+            <EditText
+                android:id="@+id/TextBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/enter_local_host"
+                android:textSize="18sp"
+                android:inputType="textNoSuggestions"
+                android:importantForAutofill="no" />
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/page_buttons"
             android:layout_width="match_parent"
@@ -49,16 +68,6 @@
             android:layout_weight="1"
             android:orientation="horizontal"
             tools:ignore="MissingConstraints">
-
-            <Button
-                android:id="@+id/URL"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/urlButton"
-                app:layout_constraintHorizontal_bias="0.492"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:ignore="ButtonStyle,MissingConstraints,NestedWeights" />
 
             <Button
                 android:id="@+id/connect"
@@ -70,11 +79,13 @@
                 tools:ignore="ButtonStyle,MissingConstraints" />
 
         </LinearLayout>
+
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/symbol_2_63"
-            android:contentDescription="@string/icon" />
+            android:id="@+id/image1"
+            android:layout_width="187dp"
+            android:layout_height="263dp"
+            android:contentDescription="@string/icon"
+            android:src="@drawable/symbol_2_63" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

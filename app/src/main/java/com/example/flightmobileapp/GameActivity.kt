@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.provider.SyncStateContract
 import android.widget.SeekBar
 import android.widget.Toast
 //import android.support.v7.app.AppCompatActivity
@@ -15,42 +14,45 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.flightmobileapp.Models.JoyStickData
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_game.*
-import kotlinx.coroutines.coroutineScope
+import kotlinx.android.synthetic.main.activity_main.*
 import okhttp3.ResponseBody
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.POST
 import java.lang.Math.*
-import java.math.RoundingMode
-import java.util.*
-import kotlin.concurrent.schedule
 
 class GameActivity/*(var url: String)*/ : AppCompatActivity() {
     //handler that handle the screenshot image every 700ms
     private lateinit var mainHandler: Handler
+    private lateinit var url:String
+    private var ip:String = ""
+    private var port:Int = 0
     private val updateTextTask = object : Runnable {
         override fun run() {
             getScreenshotFromServer()
             mainHandler.postDelayed(this, 800)
         }
     }
-    private val client = CommandClient("10.0.2.2", 52686)
+    //private val client = CommandClient(ip, port)
     private var joyStick = JoyStickData(0.0, 0.0, 0.0, 0.0)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if(intent.getStringExtra("url")!=null) {
+            url = intent.getStringExtra("url")
+        }
         setContentView(R.layout.activity_game)
-        client.connect()
+        convertFromUrlToIpAndPort();
+        //client.connect()
         mainHandler = Handler(Looper.getMainLooper())
         throttle.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                var x = 1
+                print("check1")
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                var x = 1
+                print("check1")
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
@@ -63,11 +65,11 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
         val rud = findViewById<SeekBar>(R.id.rudder)
         rud?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                var x = 1
+                print("check1")
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                var x = 1
+                print("check1")
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
@@ -85,6 +87,7 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
             joyStick.elevator = (joyStick.elevator * strength) / 100
             sendValuesToServer()
         }
+
     }
     override fun onResume() {
         super.onResume()
@@ -92,7 +95,7 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
     }
     private fun sendValuesToServer() {
         val gson = GsonBuilder().setLenient().create()
-        val retrofit = Retrofit.Builder().baseUrl("http://10.0.2.2:52686")
+        val retrofit = Retrofit.Builder().baseUrl(url)
             .addConverterFactory(GsonConverterFactory.create(gson)).build()
         val api = retrofit.create(Api::class.java)
 
@@ -110,17 +113,17 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
                     call: Call<ResponseBody>,
                     response: Response<ResponseBody>
                 ) {
-                    println("1")
+                        println("1")
                 }
             })
     }
 
-    private fun getScreenshotFromServer() {
+    public fun getScreenshotFromServer() {
         val gson = GsonBuilder()
             .setLenient()
             .create()
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:52686")
+            .baseUrl(url)
             .addConverterFactory(GsonConverterFactory.create(gson)).build()
         val api = retrofit.create(Api::class.java)
         val body = api.getImg().enqueue(object : Callback<ResponseBody> {
@@ -139,5 +142,19 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
                 print("basa")
             }
         })
+    }
+    private fun convertFromUrlToIpAndPort(){
+        var i = url.length -1
+        var portS = ""
+        while(url[i] != ':') {
+            portS = url[i] + portS
+            i--
+        }
+        port = portS.toInt()
+        i--
+        while(url[i] != '/'){
+            ip = url[i] + ip
+            i--
+        }
     }
 }
