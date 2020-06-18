@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
+import com.example.flightmobileapp.GameActivity.Companion.convertResponseToStatusMessage
 import com.example.flightmobileapp.Models.JoyStickData
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_main.*
@@ -115,7 +116,7 @@ class MainActivity : AppCompatActivity() {
                     val B = BitmapFactory.decodeStream(I)
                     saveDataAndSwitchToNextActivity(B)
                 } else {
-                    Toast.makeText(cont, response.message(), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(cont, convertResponseToStatusMessage(response), Toast.LENGTH_SHORT).show()
                 }
             }
 

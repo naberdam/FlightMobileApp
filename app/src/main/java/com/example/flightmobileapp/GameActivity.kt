@@ -2,6 +2,7 @@ package com.example.flightmobileapp
 //import android.support.v8.1.app.AppCompatActivity
 
 
+//import android.support.v7.app.AppCompatActivity
 import Api
 import android.content.Context
 import android.graphics.BitmapFactory
@@ -10,38 +11,42 @@ import android.os.Handler
 import android.os.Looper
 import android.widget.SeekBar
 import android.widget.Toast
-//import android.support.v7.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatActivity
 import com.example.flightmobileapp.Models.JoyStickData
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_game.*
-import kotlinx.android.synthetic.main.activity_main.*
 import okhttp3.ResponseBody
+import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.Math.*
+import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStreamReader
+import java.lang.Math.toRadians
+
 
 class GameActivity/*(var url: String)*/ : AppCompatActivity() {
     //handler that handle the screenshot image every 700ms
     private lateinit var mainHandler: Handler
-    private lateinit var url:String
-    private var ip:String = ""
-    private var port:Int = 0
-    private var cont:Context = this
+    private lateinit var url: String
+    private var ip: String = ""
+    private var countNumOfFails: Int = 0
+    private var port: Int = 0
+    private var cont: Context = this
     private val updateTextTask = object : Runnable {
         override fun run() {
             getScreenshotFromServer()
             mainHandler.postDelayed(this, 450)
         }
     }
+
     //private val client = CommandClient(ip, port)
     private var joyStick = JoyStickData(0.0, 0.0, 0.0, 0.0)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if(intent.getStringExtra("url")!=null) {
+        if (intent.getStringExtra("url") != null) {
             url = intent.getStringExtra("url")
         }
         setContentView(R.layout.activity_game)
@@ -92,10 +97,12 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
         }
 
     }
+
     override fun onResume() {
         super.onResume()
         mainHandler.post(updateTextTask)
     }
+
     private fun sendValuesToServer() {
         val gson = GsonBuilder().setLenient().create()
         val retrofit = Retrofit.Builder().baseUrl(url)
@@ -105,20 +112,25 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
         api.createPost(joyStick)
             .enqueue(object : Callback<ResponseBody> {
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    Toast.makeText(
-                        applicationContext, "Connection failed",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return
+                    countNumOfFails++
+                    if (countNumOfFails > 15) {
+                        Toast.makeText(
+                            applicationContext, "Connection failed",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        return
+                    }
                 }
 
                 override fun onResponse(
                     call: Call<ResponseBody>,
                     response: Response<ResponseBody>
                 ) {
-                        if(!response.message().equals("OK")){
-                            Toast.makeText(cont, response.message(), Toast.LENGTH_SHORT).show()
-                        }
+                    if (!response.message().equals("OK")) {
+                        countNumOfFails++
+                        if (countNumOfFails > 15)
+                            Toast.makeText(cont, convertResponseToStatusMessage(response), Toast.LENGTH_SHORT).show()
+                    }
                 }
             })
     }
@@ -136,15 +148,22 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
                 call: Call<ResponseBody>,
                 response: Response<ResponseBody>
             ) {
-                if(response.message().equals("OK")) {
+                if (response.message().equals("OK")) {
 
                     val I = response.body()?.byteStream()
                     val B = BitmapFactory.decodeStream(I)
+                    countNumOfFails = 0
                     runOnUiThread {
                         SimulatorView.setImageBitmap(B)
                     }
-                } else{
-                    Toast.makeText(cont, response.message(), Toast.LENGTH_SHORT).show()
+                } else {
+                    countNumOfFails++
+                    if (countNumOfFails > 13)
+                        Toast.makeText(
+                            cont,
+                            convertResponseToStatusMessage(response),
+                            Toast.LENGTH_SHORT
+                        ).show()
                 }
             }
 
@@ -153,18 +172,42 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
             }
         })
     }
-    private fun convertFromUrlToIpAndPort(){
-        var i = url.length -1
+
+    private fun convertFromUrlToIpAndPort() {
+        var i = url.length - 1
         var portS = ""
-        while(url[i] != ':') {
+        while (url[i] != ':') {
             portS = url[i] + portS
             i--
         }
         port = portS.toInt()
         i--
-        while(url[i] != '/'){
+        while (url[i] != '/') {
             ip = url[i] + ip
             i--
+        }
+    }
+    companion object {
+        public fun convertResponseToStatusMessage(response: Response<ResponseBody>): String {
+            var reader: BufferedReader? = null
+            val sb = StringBuilder()
+            try {
+                reader =
+                    BufferedReader(InputStreamReader(response.errorBody()!!.byteStream()))
+                var line: String?
+                try {
+                    while (reader.readLine().also { line = it } != null) {
+                        sb.append(line)
+                    }
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+
+            val finallyError = sb.toString()
+            return finallyError
         }
     }
 }
