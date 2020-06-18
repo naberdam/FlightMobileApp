@@ -54,7 +54,8 @@ class MainActivity : AppCompatActivity() {
         connect.setOnClickListener {
             var pattern1 =
                 Regex("http?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)")
-            var pattern2 = Regex("https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%.\\+~#=]{2,256}\\:[0-9]{4,8}\\b([-a-zA-Z0-9@:%\\+.~#?&//=]*)")
+            var pattern2 =
+                Regex("https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%.\\+~#=]{2,256}\\:[0-9]{4,8}\\b([-a-zA-Z0-9@:%\\+.~#?&//=]*)")
             var result = pattern1.containsMatchIn(TextBox.text.toString())
             var result2 = pattern2.containsMatchIn(TextBox.text.toString())
             if (!result && !result2) {
@@ -93,6 +94,7 @@ class MainActivity : AppCompatActivity() {
             localH5.text = lst[4].address
         }
     }
+
     public fun checkAndGetScreenshotFromServer() {
         Toast.makeText(cont, "Trying to connect..", Toast.LENGTH_LONG).show()
         val gson = GsonBuilder()
@@ -101,27 +103,33 @@ class MainActivity : AppCompatActivity() {
         val retrofit = Retrofit.Builder()
             .baseUrl(TextBox.text.toString())
             .addConverterFactory(GsonConverterFactory.create(gson)).build()
-        Toast.makeText(cont, "drink some coffee in the meantime", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(cont, "drink some coffee in the meantime", Toast.LENGTH_SHORT).show()
         val api = retrofit.create(Api::class.java)
         val body = api.getImg().enqueue(object : Callback<ResponseBody> {
             override fun onResponse(
                 call: Call<ResponseBody>,
                 response: Response<ResponseBody>
             ) {
-                val I = response.body()?.byteStream()
-                val B = BitmapFactory.decodeStream(I)
-                saveDataAndSwitchToNextActivity(B)
+                if (response.message().equals("OK")) {
+                    val I = response.body()?.byteStream()
+                    val B = BitmapFactory.decodeStream(I)
+                    saveDataAndSwitchToNextActivity(B)
+                } else {
+                    Toast.makeText(cont, response.message(), Toast.LENGTH_SHORT).show()
+                }
             }
+
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 Toast.makeText(cont, "connection failed", Toast.LENGTH_SHORT).show()
             }
         })
     }
+
     private fun saveDataAndSwitchToNextActivity(b: Bitmap) {
-            val localHostAddress =
-                LocalHostAddress(TextBox.text.toString(), System.currentTimeMillis())
-            db.insertData(localHostAddress)
-            lst = db.readData()
+        val localHostAddress =
+            LocalHostAddress(TextBox.text.toString(), System.currentTimeMillis())
+        db.insertData(localHostAddress)
+        lst = db.readData()
         val intent = Intent(this, GameActivity::class.java)
         intent.putExtra("url", TextBox.text.toString())
         startActivity(intent)

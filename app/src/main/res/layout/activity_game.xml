@@ -23,78 +23,65 @@
             android:contentDescription="@string/todo"
             android:gravity="center"
             tools:ignore="MissingConstraints" />
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
 
-            <FrameLayout
-                android:layout_width="wrap_content"
+<!--                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical">-->
 
                 <TextView
                     android:id="@+id/textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="@string/throttle"
+                    android:translationX="70dp"
+                    android:translationY="0dp"
                     tools:ignore="MissingConstraints"
                     tools:layout_editor_absoluteX="350dp"
                     tools:layout_editor_absoluteY="417dp" />
-
-<!--                <com.ramotion.fluidslider.FluidSlider
-                    android:id="@+id/fluidSliderThrottle"
-                    android:layout_width="202dp"
-                    android:layout_height="102dp"
-                    android:layout_marginEnd="188dp"
-                    android:elevation="2dp"
-                    android:rotation="90"
-                    app:bar_color="@color/colorPrimaryDark"
-                    app:duration="@android:integer/config_mediumAnimTime"
-                    app:end_text="1"
-                    app:initial_position="0"
-                    app:layout_constraintBottom_toBottomOf="@+id/fluidSliderRudder"
-                    app:layout_constraintEnd_toEndOf="@+id/joystick"
-                    app:layout_constraintTop_toTopOf="@+id/joystick"
-                    app:layout_constraintVertical_bias="0.391"
-                    app:size="small"
-                    app:start_text="0"
-                    tools:targetApi="lollipop" />
-                />-->
-
-
-            </FrameLayout>
-
-            <io.github.controlwear.virtual.joystick.android.JoystickView
-                android:id="@+id/joystick"
-                android:layout_width="286dp"
-                android:layout_height="match_parent"
-                custom:JV_backgroundColor="#020202"
-                custom:JV_borderColor="#6A6868"
-                custom:JV_borderWidth="8dp"
-                custom:JV_buttonColor="#6E6968"
-                tools:ignore="MissingConstraints,ObsoleteLayoutParam"
-                tools:layout_editor_absoluteX="150dp"
-                tools:layout_editor_absoluteY="452dp" />
 
             <SeekBar
                 android:id="@+id/throttle"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
+                android:translationY="8dp"
+                android:translationX="-50dp"
                 android:progressDrawable="@drawable/custom_progress"
                 android:rotation="-90"
+                app:layout_constraintEnd_toStartOf="@+id/joystick"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="0.503"
+                app:layout_constraintTop_toBottomOf="@+id/textView2"
                 tools:ignore="MissingConstraints"
                 tools:layout_editor_absoluteX="500dp"
                 tools:layout_editor_absoluteY="522dp" />
+            <io.github.controlwear.virtual.joystick.android.JoystickView
+                android:id="@+id/joystick"
+                android:layout_width="250dp"
+                android:layout_height="200dp"
+                android:translationX="-120dp"
+                android:translationY="0dp"
+                custom:JV_backgroundColor="#020202"
+                custom:JV_borderColor="#6A6868"
+                custom:JV_borderWidth="8dp"
+                custom:JV_buttonColor="#6E6968"
+                tools:layout_editor_absoluteX="150dp"
+                tools:layout_editor_absoluteY="452dp" />
         </LinearLayout>
-
         <SeekBar
             android:id="@+id/rudder"
             android:layout_width="200dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:max="100"
             android:min="-100"
+            android:translationX="10dp"
+            android:translationY="0dp"
             android:progressDrawable="@drawable/custom_progress"
             tools:ignore="MissingConstraints"
             tools:layout_editor_absoluteX="105dp"
@@ -103,6 +90,7 @@
         <TextView
             android:id="@+id/textView"
             android:layout_width="50dp"
+            android:translationX="15dp"
             android:layout_height="wrap_content"
             android:text="@string/rudder"
             tools:ignore="MissingConstraints"

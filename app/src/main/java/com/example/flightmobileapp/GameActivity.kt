@@ -3,6 +3,7 @@ package com.example.flightmobileapp
 
 
 import Api
+import android.content.Context
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
@@ -29,6 +30,7 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
     private lateinit var url:String
     private var ip:String = ""
     private var port:Int = 0
+    private var cont:Context = this
     private val updateTextTask = object : Runnable {
         override fun run() {
             getScreenshotFromServer()
@@ -114,7 +116,9 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
                     call: Call<ResponseBody>,
                     response: Response<ResponseBody>
                 ) {
-                        println("1")
+                        if(!response.message().equals("OK")){
+                            Toast.makeText(cont, response.message(), Toast.LENGTH_SHORT).show()
+                        }
                 }
             })
     }
@@ -132,15 +136,20 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
                 call: Call<ResponseBody>,
                 response: Response<ResponseBody>
             ) {
-                val I = response.body()?.byteStream()
-                val B = BitmapFactory.decodeStream(I)
-                runOnUiThread {
-                    SimulatorView.setImageBitmap(B)
+                if(response.message().equals("OK")) {
+
+                    val I = response.body()?.byteStream()
+                    val B = BitmapFactory.decodeStream(I)
+                    runOnUiThread {
+                        SimulatorView.setImageBitmap(B)
+                    }
+                } else{
+                    Toast.makeText(cont, response.message(), Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                print("basa")
+                Toast.makeText(cont, "Connection failed", Toast.LENGTH_SHORT).show()
             }
         })
     }

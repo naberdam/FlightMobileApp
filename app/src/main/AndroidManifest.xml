@@ -16,7 +16,7 @@
             android:resource="@xml/network_security_config" />
 
         <activity android:name=".GameActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity" android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
