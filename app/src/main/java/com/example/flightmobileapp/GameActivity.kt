@@ -35,9 +35,11 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
     private var countNumOfFails: Int = 0
     private var port: Int = 0
     private var cont: Context = this
+    private var flagForPause:Boolean = false
     private val updateTextTask = object : Runnable {
         override fun run() {
-            getScreenshotFromServer()
+            if(!flagForPause)
+                getScreenshotFromServer()
             mainHandler.postDelayed(this, 450)
         }
     }
@@ -98,8 +100,29 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
 
     }
 
+    override fun onPause() {
+        super.onPause()
+        flagForPause = true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        flagForPause = true
+    }
+
+    override fun onStart() {
+        super.onStart()
+        flagForPause = false
+    }
+
+    override fun onStop() {
+        super.onStop()
+        flagForPause = true
+    }
+
     override fun onResume() {
         super.onResume()
+        flagForPause = false
         mainHandler.post(updateTextTask)
     }
 
