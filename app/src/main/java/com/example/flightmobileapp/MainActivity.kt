@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
+import com.example.flightmobileapp.GameActivity.Companion.B1
 import com.example.flightmobileapp.GameActivity.Companion.convertResponseToStatusMessage
 import com.example.flightmobileapp.Models.JoyStickData
 import com.google.gson.GsonBuilder
@@ -113,8 +114,8 @@ class MainActivity : AppCompatActivity() {
             ) {
                 if (response.message().equals("OK")) {
                     val I = response.body()?.byteStream()
-                    val B = BitmapFactory.decodeStream(I)
-                    saveDataAndSwitchToNextActivity(B)
+                    B1 = BitmapFactory.decodeStream(I)
+                    saveDataAndSwitchToNextActivity()
                 } else {
                     Toast.makeText(cont, convertResponseToStatusMessage(response), Toast.LENGTH_SHORT).show()
                 }
@@ -126,7 +127,7 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun saveDataAndSwitchToNextActivity(b: Bitmap) {
+    private fun saveDataAndSwitchToNextActivity() {
         val localHostAddress =
             LocalHostAddress(TextBox.text.toString(), System.currentTimeMillis())
         db.insertData(localHostAddress)
