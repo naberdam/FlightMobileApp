@@ -57,7 +57,7 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
         setContentView(R.layout.activity_game)
         SimulatorView.setImageBitmap(B1)
         getScreenshotFromServer()
-        convertFromUrlToIpAndPort();
+        convertFromUrlToIpAndPort()
         //client.connect()
         mainHandler = Handler(Looper.getMainLooper())
         throttle.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -176,7 +176,7 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
             })
     }
     //function that get screenshot from the server
-    public fun getScreenshotFromServer() {
+    fun getScreenshotFromServer() {
         val gson = GsonBuilder()
             .setLenient()
             .create()
@@ -231,9 +231,8 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
     }
     //static function
     companion object {
-        public lateinit var imageV: ImageView
-        public lateinit var B1: Bitmap
-        public fun convertResponseToStatusMessage(response: Response<ResponseBody>): String {
+        lateinit var B1: Bitmap
+        fun convertResponseToStatusMessage(response: Response<ResponseBody>): String {
             var reader: BufferedReader? = null
             val sb = StringBuilder()
             try {
