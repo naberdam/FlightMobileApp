@@ -33,34 +33,35 @@ class MainActivity : AppCompatActivity() {
         counter = lst.size
         fromListToButtons()
 
-        TextBox.setOnClickListener() {
+        TextBox.setOnClickListener {
             TextBox.text.clear()
         }
-        localH1.setOnClickListener() {
+        localH1.setOnClickListener {
             TextBox.setText(localH1.text.toString())
         }
-        localH2.setOnClickListener() {
+        localH2.setOnClickListener {
             TextBox.setText(localH2.text.toString())
         }
-        localH3.setOnClickListener() {
+        localH3.setOnClickListener {
             TextBox.setText(localH3.text.toString())
         }
-        localH4.setOnClickListener() {
+        localH4.setOnClickListener {
             TextBox.setText(localH4.text.toString())
         }
-        localH5.setOnClickListener() {
+        localH5.setOnClickListener {
             TextBox.setText(localH5.text.toString())
         }
 
         val connect = findViewById<Button>(R.id.connect)
         connect.setOnClickListener {
+            saveData()
             TextBox.setText(removeLastSlash(TextBox.text.toString()))
-            var pattern1 =
+            val pattern1 =
                 Regex("http?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)")
-            var pattern2 =
+            val pattern2 =
                 Regex("https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%.\\+~#=]{2,256}\\:[0-9]{4,8}\\b([-a-zA-Z0-9@:%\\+.~#?&//=]*)")
-            var result = pattern1.containsMatchIn(TextBox.text.toString())
-            var result2 = pattern2.containsMatchIn(TextBox.text.toString())
+            val result = pattern1.containsMatchIn(TextBox.text.toString())
+            val result2 = pattern2.containsMatchIn(TextBox.text.toString())
             if (!result && !result2) {
                 Toast.makeText(cont, "invalid URL", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -81,24 +82,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun fromListToButtons() {
-        if (counter >= 1) {
+        if (lst.size >= 1) {
             localH1.text = lst[0].address
         }
-        if (counter >= 2) {
+        if (lst.size >= 2) {
             localH2.text = lst[1].address
         }
-        if (counter >= 3) {
+        if (lst.size >= 3) {
             localH3.text = lst[2].address
         }
-        if (counter >= 4) {
+        if (lst.size >= 4) {
             localH4.text = lst[3].address
         }
-        if (counter >= 5) {
+        if (lst.size >= 5) {
             localH5.text = lst[4].address
         }
     }
 
-    public fun checkAndGetScreenshotFromServer() {
+    fun checkAndGetScreenshotFromServer() {
         Toast.makeText(cont, "Trying to connect..", Toast.LENGTH_LONG).show()
         val gson = GsonBuilder()
             .setLenient()
@@ -126,6 +127,7 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(cont, "connection failed", Toast.LENGTH_SHORT).show()
             }
         })
+
     }
 
     private fun saveDataAndSwitchToNextActivity() {
@@ -137,6 +139,13 @@ class MainActivity : AppCompatActivity() {
         var url = removeLastSlash(TextBox.text.toString())
         intent.putExtra("url", TextBox.text.toString())
         startActivity(intent)
+    }
+    private fun saveData(){
+        val localHostAddress =
+            LocalHostAddress(TextBox.text.toString(), System.currentTimeMillis())
+        db.insertData(localHostAddress)
+        lst = db.readData()
+        fromListToButtons()
     }
     private fun removeLastSlash(url:String): String {
         if(url[url.length-1] == '/')

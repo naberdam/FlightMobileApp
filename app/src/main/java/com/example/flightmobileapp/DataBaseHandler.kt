@@ -15,13 +15,13 @@ class DataBaseHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE
     override fun onCreate(db: SQLiteDatabase?) {
         val createTable = ("CREATE TABLE " + TABLE_NAME + " (" +
                 COL_ADDRESS + " STRING PRIMARY KEY," +
-                COL_DATE_ENTER + " INTEGER)");
+                COL_DATE_ENTER + " INTEGER)")
         db?.execSQL(createTable)
     }
 
     fun insertData(localHostAddress: LocalHostAddress) {
         deleteByPrimaryKeyData(localHostAddress.address)
-        var db: SQLiteDatabase = getWritableDatabase()
+        var db: SQLiteDatabase = writableDatabase
         //val db = this.writableDatabase
         var cv = ContentValues()
         cv.put(COL_ADDRESS, localHostAddress.address)
