@@ -54,6 +54,7 @@ class MainActivity : AppCompatActivity() {
 
         val connect = findViewById<Button>(R.id.connect)
         connect.setOnClickListener {
+            TextBox.setText(removeLastSlash(TextBox.text.toString()))
             var pattern1 =
                 Regex("http?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)")
             var pattern2 =
@@ -133,7 +134,14 @@ class MainActivity : AppCompatActivity() {
         db.insertData(localHostAddress)
         lst = db.readData()
         val intent = Intent(this, GameActivity::class.java)
+        var url = removeLastSlash(TextBox.text.toString())
         intent.putExtra("url", TextBox.text.toString())
         startActivity(intent)
+    }
+    private fun removeLastSlash(url:String): String {
+        if(url[url.length-1] == '/')
+            return url.substring(0,url.length-1)
+        else
+            return url
     }
 }

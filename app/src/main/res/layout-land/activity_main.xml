@@ -58,7 +58,8 @@
                 android:text="@string/enter_local_host"
                 android:textSize="18sp"
                 android:inputType="textNoSuggestions"
-                android:importantForAutofill="no" />
+                android:importantForAutofill="no"
+                tools:ignore="LabelFor" />
         </LinearLayout>
 
         <LinearLayout

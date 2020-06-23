@@ -54,6 +54,7 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
         if (intent.getStringExtra("url") != null) {
             url = intent.getStringExtra("url")
         }
+        //function that removes last slash if there is last slash
         setContentView(R.layout.activity_game)
         SimulatorView.setImageBitmap(B1)
         getScreenshotFromServer()
