@@ -172,7 +172,7 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
                     // is problem with connection
                         //if (countNumOfFails > 15) {
                         Toast.makeText(
-                            applicationContext, "Connection failed",
+                            applicationContext, "Connection failed - cannot send arguments to server",
                             Toast.LENGTH_SHORT
                         ).show()
                         return
@@ -231,7 +231,7 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Toast.makeText(cont, "Connection failed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(cont, "Connection failed - cannot get screenshot", Toast.LENGTH_SHORT).show()
             }
         })
     }
