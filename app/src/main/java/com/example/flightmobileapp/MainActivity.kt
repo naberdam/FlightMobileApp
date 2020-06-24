@@ -51,7 +51,6 @@ class MainActivity : AppCompatActivity() {
         localH5.setOnClickListener {
             TextBox.setText(localH5.text.toString())
         }
-
         val connect = findViewById<Button>(R.id.connect)
         connect.setOnClickListener {
             saveData()
