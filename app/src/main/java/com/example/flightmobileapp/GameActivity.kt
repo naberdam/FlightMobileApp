@@ -27,11 +27,16 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
+import java.lang.Math.abs
 import java.lang.Math.toRadians
 
 
 class GameActivity/*(var url: String)*/ : AppCompatActivity() {
     //handler that handle the screenshot image every 700ms
+    private var lastThr:Double = 0.0
+    private var lastEle:Double = 0.0
+    private var lastRud:Double = 0.0
+    private var lastAoi:Double = 0.0
     private lateinit var mainHandler: Handler
     private lateinit var url: String
     private var ip: String = ""
@@ -64,7 +69,13 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
         throttle.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 //do nothing
-                print("check1")
+                if(abs(progress-lastThr) > 1){
+                    if (seekBar != null) {
+                        joyStick.throttle = (seekBar.progress.toFloat() / 100).toDouble()
+                        lastThr = progress.toDouble()
+                    }
+                    sendValuesToServer()
+                }
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -73,18 +84,23 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
             }
             //when throttle's value changed
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                if (seekBar != null) {
+/*                if (seekBar != null) {
                     joyStick.throttle = (seekBar.progress.toFloat() / 100).toDouble()
                 }
                 //tell to the server that values has been changed
-                sendValuesToServer()
+                sendValuesToServer()*/
             }
         })
         val rud = findViewById<SeekBar>(R.id.rudder)
         rud?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                //do nothing
-                print("check1")
+                if(abs(progress-lastRud) > 1){
+                    if (seekBar != null) {
+                        joyStick.rudder = (seekBar.progress.toFloat() / 100).toDouble()
+                        lastRud = progress.toDouble()
+                    }
+                    sendValuesToServer()
+                }
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -93,11 +109,11 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
             }
             //when rudder's value changed
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                if (seekBar != null) {
+/*                if (seekBar != null) {
                     joyStick.rudder = ((seekBar.progress.toFloat() / 100)).toDouble()
                 }
                 //tell the server that values has been changed
-                sendValuesToServer()
+                sendValuesToServer()*/
             }
         })
         //when joystick move-> update values and send to the server
@@ -107,7 +123,11 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
             joyStick.elevator = kotlin.math.sin(rad)
             joyStick.aileron = (joyStick.aileron * strength) / 100
             joyStick.elevator = (joyStick.elevator * strength) / 100
-            sendValuesToServer()
+            if(abs(joyStick.elevator - lastEle) > 0.01 || abs(joyStick.aileron - lastAoi) > 0.01) {
+                lastAoi = joyStick.aileron
+                lastEle = joyStick.elevator
+                sendValuesToServer()
+            }
         }
 
     }
@@ -150,13 +170,13 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
                     countNumOfFails++
                     //check if there is 15 fails in row or more,if yes tell to the user that there
                     // is problem with connection
-                    if (countNumOfFails > 15) {
+                        //if (countNumOfFails > 15) {
                         Toast.makeText(
                             applicationContext, "Connection failed",
                             Toast.LENGTH_SHORT
                         ).show()
                         return
-                    }
+                    //}
                 }
 
                 override fun onResponse(
@@ -166,9 +186,9 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
                     if (!response.message().equals("OK")) {
                         //check if there is 15 fails in row or more,if yes tell to the user that there
                         // is problem with connection
-                        countNumOfFails++
-                        if (countNumOfFails > 15)
-                            Toast.makeText(cont, convertResponseToStatusMessage(response), Toast.LENGTH_SHORT).show()
+                        //countNumOfFails++
+                        //if (countNumOfFails > 15)
+                        //    Toast.makeText(cont, convertResponseToStatusMessage(response), Toast.LENGTH_SHORT).show()
                     } else{
                         //resets countNumOfFails to 0 if the send succeed
                         countNumOfFails = 0
@@ -201,7 +221,7 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
                     }
                 } else {
                     countNumOfFails++
-                    if (countNumOfFails > 13)
+                    //if (countNumOfFails > 13)
                         Toast.makeText(
                             cont,
                             convertResponseToStatusMessage(response),
