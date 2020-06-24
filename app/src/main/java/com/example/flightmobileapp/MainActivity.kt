@@ -114,6 +114,7 @@ class MainActivity : AppCompatActivity() {
                 response: Response<ResponseBody>
             ) {
                 if (response.message().equals("OK")) {
+                    Toast.makeText(cont, "Succeed", Toast.LENGTH_SHORT).show()
                     val I = response.body()?.byteStream()
                     B1 = BitmapFactory.decodeStream(I)
                     saveDataAndSwitchToNextActivity()

@@ -27,10 +27,10 @@ class DataBaseHandler(var context: Context) : SQLiteOpenHelper(context, DATABASE
         cv.put(COL_ADDRESS, localHostAddress.address)
         cv.put(COL_DATE_ENTER, localHostAddress.dateEnter)
         var result = db.insert(TABLE_NAME, null, cv)
-        if (result == -1.toLong())
+/*        if (result == -1.toLong())
             Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show()
         else
-            Toast.makeText(context, "Succeed", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Succeed", Toast.LENGTH_SHORT).show()*/
         var lst = readData()
         var i = 0
         while(lst.size - i > 5) {
