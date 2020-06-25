@@ -33,23 +33,24 @@ import java.lang.Math.toRadians
 
 class GameActivity/*(var url: String)*/ : AppCompatActivity() {
     //handler that handle the screenshot image every 700ms
-    private var lastThr:Double = 0.0
-    private var lastEle:Double = 0.0
-    private var lastRud:Double = 0.0
-    private var lastAoi:Double = 0.0
+    private var lastThr: Double = 0.0
+    private var lastEle: Double = 0.0
+    private var lastRud: Double = 0.0
+    private var lastAoi: Double = 0.0
     private lateinit var mainHandler: Handler
     private lateinit var url: String
     private var ip: String = ""
     private var countNumOfFails: Int = 0
+    private var countNumOfJoystickFails: Int = 0
     private var port: Int = 0
     private var cont: Context = this
-    private var flagForPause:Boolean = false
+    private var flagForPause: Boolean = false
     private val updateTextTask = object : Runnable {
         override fun run() {
             //A flag that tells the program whether to pull an image from the server or not
-            if(!flagForPause)
+            if (!flagForPause)
                 getScreenshotFromServer()
-            mainHandler.postDelayed(this, 450)
+            mainHandler.postDelayed(this, 1000)
         }
     }
 
@@ -69,7 +70,7 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
         throttle.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 //do nothing
-                if(abs(progress-lastThr) > 1){
+                if (abs(progress - lastThr) > 1) {
                     if (seekBar != null) {
                         joyStick.throttle = (seekBar.progress.toFloat() / 100).toDouble()
                         lastThr = progress.toDouble()
@@ -82,6 +83,7 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
                 //do nothing
                 print("check1")
             }
+
             //when throttle's value changed
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
 /*                if (seekBar != null) {
@@ -94,7 +96,7 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
         val rud = findViewById<SeekBar>(R.id.rudder)
         rud?.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                if(abs(progress-lastRud) > 1){
+                if (abs(progress - lastRud) > 1) {
                     if (seekBar != null) {
                         joyStick.rudder = (seekBar.progress.toFloat() / 100).toDouble()
                         lastRud = progress.toDouble()
@@ -107,6 +109,7 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
                 //do nothing
                 print("check1")
             }
+
             //when rudder's value changed
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
 /*                if (seekBar != null) {
@@ -123,7 +126,7 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
             joyStick.elevator = kotlin.math.sin(rad)
             joyStick.aileron = (joyStick.aileron * strength) / 100
             joyStick.elevator = (joyStick.elevator * strength) / 100
-            if(abs(joyStick.elevator - lastEle) > 0.01 || abs(joyStick.aileron - lastAoi) > 0.01) {
+            if (abs(joyStick.elevator - lastEle) > 0.01 || abs(joyStick.aileron - lastAoi) > 0.01) {
                 lastAoi = joyStick.aileron
                 lastEle = joyStick.elevator
                 sendValuesToServer()
@@ -131,32 +134,38 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
         }
 
     }
+
     //when app pause
     override fun onPause() {
         super.onPause()
         flagForPause = true
     }
+
     //when app destroy
     override fun onDestroy() {
         super.onDestroy()
         flagForPause = true
     }
+
     //when app start
     override fun onStart() {
         super.onStart()
         flagForPause = false
     }
+
     //when app stop
     override fun onStop() {
         super.onStop()
         flagForPause = true
     }
+
     //when app resume
     override fun onResume() {
         super.onResume()
         flagForPause = false
         mainHandler.post(updateTextTask)
     }
+
     //function that sends the value of the joystick to the server
     private fun sendValuesToServer() {
         val gson = GsonBuilder().setLenient().create()
@@ -170,12 +179,12 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
                     countNumOfFails++
                     //check if there is 15 fails in row or more,if yes tell to the user that there
                     // is problem with connection
-                        //if (countNumOfFails > 15) {
-                        Toast.makeText(
-                            applicationContext, "Connection failed",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        return
+                    //if (countNumOfFails > 15) {
+                    Toast.makeText(
+                        applicationContext, "Connection failed",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return
                     //}
                 }
 
@@ -183,19 +192,28 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
                     call: Call<ResponseBody>,
                     response: Response<ResponseBody>
                 ) {
-                    if (!response.message().equals("OK")) {
+                    if (!response.isSuccessful) {
                         //check if there is 15 fails in row or more,if yes tell to the user that there
                         // is problem with connection
-                        //countNumOfFails++
-                        //if (countNumOfFails > 15)
-                        //    Toast.makeText(cont, convertResponseToStatusMessage(response), Toast.LENGTH_SHORT).show()
-                    } else{
+                        countNumOfJoystickFails++
+                        var ourResponse = convertResponseToStatusMessage(response)
+                        if (ourResponse == "") {
+                            ourResponse = "Problem with server"
+                        }
+                        if (countNumOfJoystickFails < 3)
+                            Toast.makeText(
+                                cont,
+                                ourResponse,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                    } else {
                         //resets countNumOfFails to 0 if the send succeed
-                        countNumOfFails = 0
+                        countNumOfJoystickFails = 0
                     }
                 }
             })
     }
+
     //function that get screenshot from the server
     fun getScreenshotFromServer() {
         val gson = GsonBuilder()
@@ -210,8 +228,7 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
                 call: Call<ResponseBody>,
                 response: Response<ResponseBody>
             ) {
-                if (response.message().equals("OK")) {
-
+                if (response.isSuccessful) {
                     val I = response.body()?.byteStream()
                     val B = BitmapFactory.decodeStream(I)
                     //resets countNumOfFails to 0
@@ -221,12 +238,17 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
                     }
                 } else {
                     countNumOfFails++
-                    //if (countNumOfFails > 13)
+                    var ourResponse = convertResponseToStatusMessage(response)
+                    if (ourResponse == "") {
+                        ourResponse = "Problem with taking screenshot"
+                    }
+                    if (!flagForPause && countNumOfFails < 2) {
                         Toast.makeText(
                             cont,
-                            convertResponseToStatusMessage(response),
+                            ourResponse,
                             Toast.LENGTH_SHORT
                         ).show()
+                    }
                 }
             }
 
@@ -250,11 +272,14 @@ class GameActivity/*(var url: String)*/ : AppCompatActivity() {
             i--
         }
     }
+
     //static function
     companion object {
         lateinit var B1: Bitmap
         fun convertResponseToStatusMessage(response: Response<ResponseBody>): String {
             var reader: BufferedReader? = null
+            if (response.message() == null)
+                return ""
             val sb = StringBuilder()
             try {
                 reader =
