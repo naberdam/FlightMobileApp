@@ -66,17 +66,6 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             checkAndGetScreenshotFromServer()
-/*            if (TextBox.text.toString().length > 0) {
-                val localHostAddress =
-                    LocalHostAddress(TextBox.text.toString(), System.currentTimeMillis())
-                db.insertData(localHostAddress)
-                lst = db.readData()
-                var x = 1
-            }
-            val intent = Intent(this, GameActivity::class.java)
-            intent.putExtra("url", TextBox.text.toString())
-            //intent.putExtra("simulatorScreen", image)
-            startActivity(intent)*/
         }
     }
 
