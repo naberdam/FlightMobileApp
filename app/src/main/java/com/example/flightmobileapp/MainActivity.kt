@@ -102,16 +102,19 @@ class MainActivity : AppCompatActivity() {
                 call: Call<ResponseBody>,
                 response: Response<ResponseBody>
             ) {
-                if (response.message().equals("OK")) {
+                if (response.isSuccessful) {
                     Toast.makeText(cont, "Succeed", Toast.LENGTH_SHORT).show()
                     val I = response.body()?.byteStream()
                     B1 = BitmapFactory.decodeStream(I)
                     saveDataAndSwitchToNextActivity()
                 } else {
-                    Toast.makeText(cont, convertResponseToStatusMessage(response), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        cont,
+                        convertResponseToStatusMessage(response),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
-
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 Toast.makeText(cont, "connection failed", Toast.LENGTH_SHORT).show()
             }
@@ -129,17 +132,43 @@ class MainActivity : AppCompatActivity() {
         intent.putExtra("url", TextBox.text.toString())
         startActivity(intent)
     }
-    private fun saveData(){
+
+    private fun saveData() {
         val localHostAddress =
             LocalHostAddress(TextBox.text.toString(), System.currentTimeMillis())
         db.insertData(localHostAddress)
         lst = db.readData()
         fromListToButtons()
     }
-    private fun removeLastSlash(url:String): String {
-        if(url[url.length-1] == '/')
-            return url.substring(0,url.length-1)
+
+    private fun removeLastSlash(url: String): String {
+        if (url[url.length - 1] == '/')
+            return url.substring(0, url.length - 1)
         else
             return url
+    }
+    //when app pause
+    override fun onPause() {
+        super.onPause()
+    }
+
+    //when app destroy
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
+    //when app start
+    override fun onStart() {
+        super.onStart()
+    }
+
+    //when app stop
+    override fun onStop() {
+        super.onStop()
+    }
+
+    //when app resume
+    override fun onResume() {
+        super.onResume()
     }
 }
