@@ -56,9 +56,9 @@ class MainActivity : AppCompatActivity() {
             saveData()
             TextBox.setText(removeLastSlash(TextBox.text.toString()))
             val pattern1 =
-                Regex("http?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%_\\+.~#?&//=]*)")
+                Regex("http?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%.\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b([-a-zA-Z0-9()@:%\\+.~#?&//=]*)")
             val pattern2 =
-                Regex("https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%.\\+~#=]{2,256}\\:[0-9]{4,8}\\b([-a-zA-Z0-9@:%\\+.~#?&//=]*)")
+                Regex("https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%.\\+#=]{2,256}\\:[0-9]{4,8}\\b([-a-zA-Z0-9@:%\\+.#?&//=]*)")
             val result = pattern1.containsMatchIn(TextBox.text.toString())
             val result2 = pattern2.containsMatchIn(TextBox.text.toString())
             if (!result && !result2) {
@@ -66,6 +66,17 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             checkAndGetScreenshotFromServer()
+/*            if (TextBox.text.toString().length > 0) {
+                val localHostAddress =
+                    LocalHostAddress(TextBox.text.toString(), System.currentTimeMillis())
+                db.insertData(localHostAddress)
+                lst = db.readData()
+                var x = 1
+            }
+            val intent = Intent(this, GameActivity::class.java)
+            intent.putExtra("url", TextBox.text.toString())
+            //intent.putExtra("simulatorScreen", image)
+            startActivity(intent)*/
         }
     }
 
